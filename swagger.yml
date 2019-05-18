@@ -1,0 +1,1017 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: JinXiuQingHua mini program
+  termsOfService: http://www.jxqh.com/termsofservice
+  description: 锦绣青华美业智能平台
+  contact:
+    name: jinxiuqinghua
+    url: http://www.jxqh.com
+    email: jxqh20180701@163.com
+  license:
+    name: Copyright ©2019 JinXiuQingHua, All Rights Reserved.
+    url: http://jxqh/copyright.html
+
+# Note that for Implicit Flow, you must provide the Token URL.
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+  implicit:
+    type: oauth2
+    # This should be updated to the Authorization URL of your OAuth provider.
+    authorizationUrl: http://example.com/oauth/auth
+    flow: implicit
+    scopes:
+      write: allows modifying resources
+      read: allows reading resources
+
+security:
+  - api_key: []
+  - implicit:
+    - read
+    - write
+
+parameters:
+  Employee:
+    in: path
+    name: employee_id
+    description: employee id
+    required: true
+    type: integer
+    format: int64
+  Member:
+    in: path
+    name: member_id
+    description: employee id
+    required: true
+    type: integer
+    format: int64
+  MembershipCard:
+    in: path
+    name: card_id
+    description: employee id
+    required: true
+    type: integer
+    format: int64
+
+responses:
+  OK:
+    description: OK    
+  NotFound:
+    description: not found    
+
+consumes:
+  - application/json
+  - application/xml
+
+produces:
+  - application/json
+  - application/xml
+
+paths:
+  /employees:
+    get:
+      tags: 
+      - employees
+      summary: return list of employees
+      description: a
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Employee'
+  /employee:
+    post:
+      tags: 
+      - employees
+      summary: add employee.
+      description: TODO
+      parameters:
+      - in: body
+        name: body
+        description: employee object
+        required: true
+        schema:
+          $ref: '#/definitions/Employee'
+      operationId: addemployee
+      responses:
+        200:
+          $ref: '#/responses/OK'
+        405:
+          description: Invalid input
+    put:
+      tags: 
+      - employees
+      summary: update employee.
+      description: TODO
+      parameters:
+      - in: body
+        name: body
+        description: employee object
+        required: true
+        schema:
+          $ref: '#/definitions/Employee'
+      operationId: updateemployee
+      responses:
+        200:
+          $ref: '#/responses/OK'
+        405:
+          description: Invalid input
+          
+  /employee/{employee_id}:
+    parameters:
+    - $ref: '#/parameters/Employee'  
+    get:
+      tags: 
+      - employees
+      summary: return detailed info of employee.
+      description: a
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Employee'    
+    delete:
+      tags: 
+      - employees
+      summary: delete employee.
+      description: a
+      responses:
+        200:
+          description: OK
+
+  /check:
+    get:
+      tags:
+      - check
+      summary: check out.
+      description: 买单
+      responses:
+        200:
+          description: OK
+
+  /members:
+    get:
+      tags:
+      - member
+      summary: get members.
+      description: 获取顾客信息
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Member'
+
+  /member/query/{keyword}:
+    parameters:
+    - in: path
+      name: keyword
+      description: employee id
+      required: true
+      type: string
+    get:
+      tags:
+      - member
+      summary: get members.
+      description: 获取顾客信息
+      responses:
+        200:
+          description: OK
+          
+  /membershipcard/types:
+    get:
+      tags:
+      - membershipcard
+      summary: get membership card types.
+      description: 获取所有会员卡种类
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+            example: ["钻石卡", "贵宾卡"]
+
+  /membershipcard/type:
+    post:
+      tags:
+      - membershipcard
+      summary: add membership card type.
+      description: 添加会员卡种类
+      parameters:
+      - in: body
+        name: body
+        description: card type object
+        required: true
+        schema:
+          $ref: '#/definitions/MembershipCard'
+      responses:
+        200:
+          description: OK
+    put:
+      tags:
+      - membershipcard
+      summary: add membership card type.
+      description: 更改会员卡种类
+      parameters:
+      - in: body
+        name: body
+        description: card type object
+        required: true
+        schema:
+          $ref: '#/definitions/MembershipCard'
+      responses:
+        200:
+          description: OK
+          
+  /membershipcard/type/{card_id}:
+    parameters:
+    - $ref: '#/parameters/MembershipCard'
+    get:
+      tags:
+      - membershipcard
+      summary: get membership card type.
+      description: 获取某类会员卡详细信息
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/MembershipCard"            
+    delete:
+      tags: 
+      - membershipcard
+      summary: delete membershipcard.
+      description: 删除某类会员卡
+      responses:
+        200:
+          description: OK
+
+ 
+
+#settings
+#Items 项目
+#折扣设定
+#变价设置
+
+#添加门店
+#添加公司
+
+#设置员工权限列表
+#管理费
+#开支？
+#设置固定支出
+#店内业绩统计
+
+definitions:
+  Employee:
+    type: object
+    required: 
+    - name
+    - tel
+    properties:
+      employee_id:
+        type: integer
+      name:
+        type: string  
+      tel:
+        type: string
+      role:
+        type: integer
+        format: int64
+        description: 角色（店长、高级发型师） # 这里为角色id，链接到Role
+      created:
+        type: string
+        format: date-time
+      loginCount:
+        type: integer
+        format: int64
+        description: 登录次数
+      subordinateShops:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: 所属门店
+      subordinateCompany:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: 所属公司        
+      authority:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: 权限
+      password:
+        type: string
+        format: password
+      basicSalary:
+        type: integer
+        format: int64
+        default: 0        
+      # 以下不可设置
+      sex:
+        type: string
+      bankCardNumber:
+        type: string  
+      idCardNumber:
+        type: string
+      birthday:
+        type: string
+        format: date-time
+      birthdayType:
+        type: integer
+        format: int64
+        description: 阴历、阳历(0, 1)
+      entryDate:
+        type: string
+        format: date-time
+      avatar:
+        type: string
+      schedual:
+        type: integer
+        format: int64
+        description: 是否可预约
+      in-service:
+        type: boolean
+        default: true
+        description: 是否在职
+
+    example: 
+      name: "Lilei"
+      tel: 18810101010
+      role: "admin"
+
+  Member:
+    type: object
+    description: 会员
+    required: 
+    - name
+    - tel
+    - sex
+    - birthday
+    - birthdayType
+    properties:
+      member_id:
+        type: integer
+      name:
+        type: string  
+      tel:
+        type: string
+      created:
+        type: string
+        format: date-time
+      sex:
+        type: integer 
+        description: 性别# 0女,1男
+      card:
+        type: array
+        items:
+          $ref: '#/definitions/CardInfo'
+      set:
+        type: array
+        items:
+          $ref: '#/definitions/SetItems'
+      lastConsumptionDate:
+        type: string
+        format: date-time
+        description: 最后消费日期
+      birthday:
+        type: string
+        format: date-time
+      birthdayType:
+        type: integer
+        format: int64
+        description: 阴历、阳历(0, 1)
+      deleted:
+        type: boolean
+        description: 是否已删除
+    example: 
+      member_id: jxqh0000001
+      name: 张三
+      tel: 17311039023
+      created: 2019-03-29 19:32:90
+      sex: 1
+      card: []
+      set: []
+      lastConsumptionDate: 2019-05-29 19:32:90
+      birthday: 1993-05-20
+      birthdayType: 0
+      deleted: False
+
+  FIT:
+    description: 散客(fully independent traveller)
+    type: object
+    properties:
+      fitId:
+        type: integer
+        description: 散客id
+      fitSex:
+        type: integer
+        description: 散客性别
+  
+  # 会员卡信息，用于显示会员的每张卡信息      
+  CardInfo:   
+    type: object
+    properties:
+      id:
+        type: integer
+      type:
+        type: integer
+      subordinateShop:
+        type: integer
+        description: 所属门店（--）
+      discount:
+        type: integer
+      amount:
+        type: integer
+      consumptions:
+        type: integer
+      balance:
+        type: integer
+      giftBalance:
+        type: integer
+      expired:
+        type: string
+        format: date-time
+      consumeCount: 
+        type: integer
+        format: int64
+      point:
+        type: integer
+        format: int64
+        
+  # delete
+  # 会员卡基础设置
+  MembershipCard:
+    type: object
+    required:
+    - cardtype
+    - name
+    - cardid
+    - applicableShops
+    - discount
+    - productionDiscount
+    properties:
+      cardType:
+        type: string
+        description: 卡类型 # 套餐卡、储值卡
+      name:
+        type: string
+        description: 卡名称 # 钻石卡、贵宾卡
+      cardId:
+        type: integer
+        format: int64
+        description: 卡id
+      cost:
+        type: integer
+        format: int64
+        default: 0
+        description: 工本费
+      minActivateAmount:
+        type: integer
+        format: int64
+        description: 最低开卡金额
+        default: 0
+      minRechargeAmount:
+        type: integer
+        format: int64   
+        description: 最低充值金额
+        default: 0
+      discount:
+        type: integer
+        format: int64   
+        description: 折扣
+        default: 10
+      productionDiscount:
+        type: integer
+        format: int64   
+        description: 卖品折扣
+        default: 10
+      giftMoneyDiscount:
+        type: boolean
+        description: 赠送金可否打折
+        default: false
+      maxGiftMoneyAmount:
+        type: integer
+        format: int64   
+        description: 最大赠送金额
+        default: 99999999
+      crossShop:
+        type: boolean
+        description: 是否可跨店消费
+        default: false
+      crossCompany:
+        type: boolean
+        description: 是否可跨公司消费
+        default: false
+      expired:
+        type: string
+        format: date-time
+        description: 有效期
+        default: infinity
+      applicableShops:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: 适用门店
+      applicableDepartment:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: 适用部门
+      annotaions:
+        type: string
+        description: 备注
+        default: ""
+      pointRate:
+        type: integer
+        description: 会员卡赠送积分比例
+        default: 0
+      deprecated:
+        type: boolean
+        default: false
+        description: 是否停止办理
+    example:
+      cardtype: "set" # 或者是vip(会员卡)
+      cardid: 1
+      name: "钻石卡"
+      applicableShops: [1,3]
+
+  # 服务项目
+  ServiceItems:
+    type: object
+    description: 服务项目
+    required: 
+    - itemId
+    - name
+    properties:
+      itemId:
+        type: string
+        description: 项目id
+      name:
+        type: string
+        description: 项目名称
+      catogory:
+        type: integer
+        description: 第一分类 # 服务项目类型ID
+      additional:
+        type: boolean
+        description: 是否加项
+        default: false
+      applicableShops:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: 适用门店
+      avatar:
+        type: string
+        description: 项目图片
+      discount:
+        type: integer
+        format: int64
+        description: 会员卡折扣 #定价或者百分比
+      fixedPrice:
+        type: boolean
+        default: true
+        description: 是否为定价 # 是否可修改
+      openComment:
+        type: boolean
+        description: 是否开启顾客评价
+        default: false
+
+  ServiceItemType:
+    type: object
+    properties:
+      Id:
+        type: integer
+        description: 服务项目Id
+      name:
+        type: string
+        description: 服务项目名称
+      bookable:
+        type: boolean
+        default: true
+        description: 是否可预约
+      department:
+        type: integer
+        description: 部门
+
+  SetItems:
+    type: object
+    required: 
+    - setName
+    - expired
+    - serviceItem
+    properties:
+      setId:
+        type: integer
+        description: 套餐id
+      setName:
+        type: string
+        description: 套餐名称
+      expired:
+        type: string
+        format: date-time
+        description: 套餐截止日期
+      serviceItem:
+        type: array
+        items:
+          $ref: '#/definitions/setServiceList'
+        description: 服务项目列表
+      cost:
+        type: integer
+        description: 套餐成本
+      applicableShops:
+        type: array
+        items:
+          type: integer
+          description: 门店id
+      price:
+        type: integer
+        description: 套餐价格
+        
+  setServiceList:
+    type: object
+    properties:
+      serviceId:
+        type: integer
+        description: 服务项目id
+      amount:
+        type: integer
+        description: 次数
+
+  SellItems:
+    type: object
+    required: 
+    - itemId
+    - name
+    properties:
+      itemId:
+        type: string
+        description: 卖品id
+      name:
+        type: string
+        description: 卖品名称
+      catogory:
+        type: integer
+        description: 第一分类 # 服务项目类型ID
+      additional:
+        type: boolean
+        description: 是否加项
+        default: false
+      applicableShops:
+        type: array
+        items:
+          type: integer
+          format: int64
+        description: 适用门店
+      avatar:
+        type: string
+        description: 项目图片
+      discount:
+        type: integer
+        format: int64
+        description: 会员卡折扣 #定价或者百分比
+      fixedPrice:
+        type: boolean
+        default: true
+        description: 是否为定价 # 是否可修改
+      openComment:
+        type: boolean
+        description: 是否开启顾客评价
+        default: false
+
+  DailyExpenditure:
+    type: object
+    properties:
+      expenditureId:
+        type: integer
+        description: 日常开支Id
+      expenditureName:
+        type: string
+        description: 日常开支名称
+        
+  EmployeeLevel:
+    type: object
+    properties:
+      levelId:
+        type: integer
+        format: int64
+        description: 级别Id
+      levelName:
+        type: string
+        description: 级别名称 （运营店长、美容店长）
+      levelTypeName:
+        type: string
+        description: 级别类型名称  （技师、设计师、美容师、美容经理）
+
+  EmployeeLevelType:
+    type: object
+    properties:
+      levelTypeId:
+        type: integer
+        format: int64
+        description: 级别类型Id
+      levelTypeName:
+        type: string
+        description: 级别类型名称  （技师、设计师、美容师、美容经理）
+      salaryType:
+        type: integer
+        description: 工资计算方式 0 表示按业绩、1 表示按单个项目
+
+  OperationLog:
+    type: object
+    properties:
+      operator:
+        type: string
+      operateTime:
+        type: string
+        format: date-time
+      operation:
+        type: string
+      subordinateShop:
+        type: integer
+        description: 所属门店
+      subordinateCompany:
+        type: integer
+        description: 所属公司
+  
+  Shop:
+    type: object
+    properties:
+      name:
+        type: string
+        description: 门店名称
+      shipId:
+        type: string
+        description: 门店id
+      avatar:
+        type: string
+        description: 门店图片
+      tag:
+        type: string
+        description: 门店区域标签
+      address:
+        type: string
+        description: 门店地址
+      tel:
+        type: string
+        description: 门店电话
+      show:
+        type: boolean
+        description: 是否显示在前端
+      top:
+        type: boolean
+        description: 是否置顶
+
+  ServiceItemCommission:
+    description: 项目提成
+    type: object
+    properties:
+      name:
+        type: string
+        description: 项目名称
+      level:
+        type: integer
+        description: 适用员工级别
+      consumeType:
+        type: integer
+        description: 用卡类型 #0, 1
+  
+  CardCommission:
+    description: 开、充卡提成
+    type: object
+    properties:
+      name:
+        type: string
+        description: 项目名称
+      cardType:
+        type: integer
+        description: 卡类型
+      commissionRule:
+        type: object
+        description: 提成类型
+        properties:
+          fixedCommission:
+            type: boolean
+            default: false
+          singleCommission:
+            type: integer
+            default: 0
+          multipleCommission:
+            type: array
+            items:
+              type: integer
+            description: 多人开、充卡提成
+
+  SellItemCommission:
+    description: 卖品提成
+    type: object
+    properties:
+      name:
+        type: string
+        description: 项目名称    
+      cardType:
+        type: integer
+        description: 卡类型
+      commissionRule:
+        type: object
+        description: 提成类型
+        properties:
+          fixedCommission:
+            type: boolean
+            default: false
+          singleCommission:
+            type: integer
+            default: 0
+          multipleCommission:
+            type: array
+            items:
+              type: integer
+            description: 按工位提成
+
+  SetCommission:
+    type: object
+    description: 套餐销售提成
+    properties:
+      name:
+        type: string
+        description: 项目名称 
+      cardType:
+        type: integer
+        description: 卡类型
+      commissionRule:
+        type: object
+        description: 提成类型
+        properties:
+          fixedCommission:
+            type: boolean
+            default: false
+          singleCommission:
+            type: integer
+            default: 0
+          multipleCommission:
+            type: array
+            items:
+              type: integer
+            description: 按工位提成
+
+  ServiceBill:
+    type: object
+    description: 项目账单
+    required: 
+    - billId
+    - costomerType
+    - customerSex
+    - Amount
+    - serviceItem
+    properties:
+      billId:
+        type: integer
+        description: 流水单号
+      costomerType:
+        type: integer
+        description: 顾客类别 #0 散客 1会员
+      customerSex:
+        type: integer
+        description: 性别#0 女 1男
+      Amount:
+        type: integer
+        format: int64
+        description: 金额
+      paymentType:
+        type: integer
+        description: 支付类型 # 0 现金消费 1 卡金消费
+      serviceItem:
+        type: integer
+        description: 服务项目
+      staff:
+        type: integer
+        description: 服务员工
+      appointment:
+        type: boolean
+        description: 指定类型
+        default: false
+      operator:
+        type: integer
+        description: 操作员
+      kpi:
+        type: integer
+        format: int64
+        description: 业绩
+      rate:
+        type: integer
+        description: 顾客评分# 1-5
+      audit:
+        type: boolean
+        description: 审核
+
+  Company:
+    type: object
+    required: 
+    - name
+    - companyId
+    properties:
+      name:
+        type: string
+        description: 公司名称
+      companyId:
+        type: string
+        description: 公司id
+      "description":
+        type: string
+        description: 公司简介
+      brandDescription:
+        type: string
+        description: 品牌介绍
+      Anouncement:
+        type: string
+        description: 公告
+      shops:
+        type: array
+        items:
+          $ref: '#/definitions/Shop'
+    example: 
+      name: "北京锦绣青华品牌管理有限公司"
+      companyId: "0101111"
+      "description": "北京美业领先者"
+
+# 职位设置
+# 日常开支审核设置
+# 房租水费设置
+
+  # manager
+  Manager:
+    type: object
+    description: 权限设置
+    properties:
+      name:
+        type: string
+        description: 姓名
+      alias:
+        type: string
+        description: 别名（财务、收银号）
+      role:
+        type: string
+        description: 职位名称（老板、管理员、操作员）
+      tel:
+        type: integer
+        description: 手机号
+      createdAt:
+        type: string
+        format: date-time
+        description: 创建日期
+      loginCount:
+        type: integer
+        description: 登陆次数
+      limitScope:
+        type: array
+        items:
+          type: integer
+          description: 权限列表
+      
+  #role:
+  # 四个
+        
+    
+# 自定义配置
+  FreeSettings:
+    type: object
+    properties:
+      name:
+        type: string
+        description: 自定义配置名称
+      id:
+        type: integer
+        description: id
+      params1:
+        type: string
+        description: 参数1
+      
+        
+# 独立页面， 管理所有公司
+# 创建公司
+# 创建公司管理员
+# 部分设置未找到：总部设置，（美发部、美容部）
+
+
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /jagon12345/jxqh/1.0.0
+schemes:
+ - https
+ - http
+
